@@ -1,3 +1,7 @@
+# files we don't want
+image/
+*.mp4
+
 # Windows image file caches
 Thumbs.db
 ehthumbs.db
