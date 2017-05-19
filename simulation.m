@@ -37,7 +37,7 @@ alpha=[3.2684	3.2878	3.2354	3.2111	3.1820	3.0640	3.1421	2.9644	3.0291	2.9366	2.9
 
 robot=Marlo_2D_class;
 real_robot=Marlo_2D_class;
-real_robot.mT=1.5*real_robot.mT;
+real_robot.mT=real_robot.mT;
 
 IC=[0,0,0,3.5/4*pi,4.5/4*pi,pi,3/2*pi,0,0,0,0,0,0,0]';
 dt=0.05
@@ -48,7 +48,7 @@ T=[];
 tstart=0;
 index=[];
 % [T,X]=ode45(@swing_model,timespan,IC);
-for j=1:9
+for j=1:30
     j
     [TT,XX]=ode45(@swing_model,timespan,IC,opts);
     XX=XX';
@@ -149,10 +149,10 @@ for i=1:length(T)
     [pT,pHip,p1R,p2R,p3R,p4R,p1L,p2L,p3L,p4L]=robot.get_joint_position(X(:,i));
     axis([-2+pHip(1) +2+pHip(1) -1 3])
     drawnow;
-    %%%%%%get video%%%%%
-    F(i) = getframe(gcf);
-    %%%%%%%%%
-    pause(dt);
+%     %%%%%%get video%%%%%
+%     F(i) = getframe(gcf);
+%     %%%%%%%%%
+%     pause(dt);
 end
 %%%%%make video
 vi = VideoWriter('video', 'MPEG-4');
