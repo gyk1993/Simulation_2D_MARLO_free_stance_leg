@@ -12,16 +12,30 @@ dq=x(8:14);
 h0=robot.H0*q;
 dh0=robot.H0*dq;
 
-s=t/Tp;
-if s > 1
-    s = 1;
-elseif s<0
-    s = 0;
-end
+dpHip=robot.get_joint_velocity(x);
+alpha(1,:)=neuralnetwork_1(dpHip(1))';
+alpha(2,:)=neuralnetwork_2(dpHip(1))';
+alpha(3,:)=neuralnetwork_3(dpHip(1))';
+alpha(4,:)=neuralnetwork_4(dpHip(1))';
 
+
+s=t/Tp;
 hd = bezier(alpha,s);
 dhd = dbezier(alpha,s)*1/Tp;
 ddhd = d2bezier(alpha,s)*1/Tp^2;
+if s > 1
+    s = 1;
+    hd = bezier(alpha,s);
+    dhd=0;
+elseif s<0
+    s = 0;
+    hd = bezier(alpha,s);
+    dhd=0;
+end
+
+% hd = bezier(alpha,s);
+% dhd = dbezier(alpha,s)*1/Tp;
+% ddhd = d2bezier(alpha,s)*1/Tp^2;
 
 h=h0-hd;
 dh=dh0-dhd;
@@ -41,14 +55,19 @@ temp=robot.H0*[eye(7) zeros(7,2)]*M^-1;
 q3_desire=interp1(linspace(0,1,29),torso_angle,s);
 dq3_desire=interp1(linspace(0,1,29),d_torso_angle,s);
 
+
+dq3_desire=0;
+
 dpHip=robot.get_joint_velocity(x);
 
 h(1) = -(q(3)-q3_desire); % replace stance leg to torso angle
 dh(1) = -(dq(3)-dq3_desire);
+% h(3)=h(3)+0.1;
 % h(2) = h(2)+0.25*(vel_des-dpHip(1));
 % h(2) = h(2)-0.2*(vel_avg-vel_des)-0.01*vel_error_interate+0.05*vel_error_derivative;
 % h(2) = h(2)-0.2*(vel_avg-vel_des)+0.05*vel_error_derivative;
-h(2) = h(2)-0.25*(vel_avg-vel_des);
+% h(2) = h(2)-0.05*(vel_avg-vel_des);
 u=-robot.H0(:,4:7)^-1*(Kp_u*h+Kd_u*dh);
+
 end
 

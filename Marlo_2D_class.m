@@ -857,6 +857,31 @@ classdef Marlo_2D_class <handle
             
             pT=pHip+obj.R(qT)*[0;LT];
         end
+        function dpHip = get_joint_velocity(obj,x)
+            L1=obj.L1;    L3=obj.L3;    LT=obj.LT;
+            L2=obj.L2;    L4=obj.L4;
+            
+            q1=x(1);
+            q2=x(2);
+            q3=x(3);
+            q4=x(4);
+            q5=x(5);
+            q6=x(6);
+            q7=x(7);
+            
+            dq1=x(8);
+            dq2=x(9);
+            dq3=x(10);
+            dq4=x(11);
+            dq5=x(12);
+            dq6=x(13);
+            dq7=x(14);
+            
+            dpHip = [ dq1 + L3*dq3*cos(q3 + q5) + L4*dq3*cos(q3 + q4) + L4*dq4*cos(q3 + q4) + L3*dq5*cos(q3 + q5);
+                        dq2 + L3*dq3*sin(q3 + q5) + L4*dq3*sin(q3 + q4) + L4*dq4*sin(q3 + q4) + L3*dq5*sin(q3 + q5)];
+ 
+
+        end
         function Rotation_matrix=R(obj,x)
             Rotation_matrix=[cos(x),-sin(x);sin(x),cos(x)];
         end

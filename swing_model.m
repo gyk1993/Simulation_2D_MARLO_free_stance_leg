@@ -10,7 +10,7 @@ dq=x(8:14);
 [D,C,G,B,~]= real_robot.Dynamic_model(q,dq);
 
 % u=zeros(4,1);
-u=input_torque(x);
+u=input_torque(x,t);
 Fg=ground_force_swing(real_robot,x,u);
 [ER,dER]=real_robot.get_ER(x);
 

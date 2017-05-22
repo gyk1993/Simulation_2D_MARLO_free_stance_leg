@@ -29,9 +29,6 @@ theta_begin=-3.28283938204512;
 theta_end=-2.99861395834076;
 
 load(['opt_result\avg_type1_' num2str(vel_des*10) 'dms'])
-
-vel_des = outputs{1}.dq(end,1);
-
 alpha=reshape(outputs{1}.a(1,:),4,6);
 Tp=outputs{1}.t(1);
 torso_angle=outputs{1}.q(:,3);
@@ -82,17 +79,17 @@ for j=1:40
     pHip_1=pHip(1);
     [pT,pHip,p1R,p2R,p3R,p4R,p1L,p2L,p3L,p4L]=robot.get_joint_position(XX(:,end));
     pHip_2=pHip(1);
-    dpHip=robot.get_joint_velocity(XX(:,end));
-    vel_avg=dpHip(1);
+    dpHip=robot.get_joint_velo(XX(:,end));
+    vel_avg=dpHip;
     v_pstep=[v_pstep vel_avg*ones(1,length(TT))];
     vel_error_interate=vel_error_interate+(vel_avg-vel_des);
     vel_error_derivative=(vel_avg-vel_des)-vel_error_prev;
     vel_error_prev=(vel_avg-vel_des);
     %% for ml controller
-%     alpha(1,:)=neuralnetwork_1(vel_avg)';
-%     alpha(2,:)=neuralnetwork_2(vel_avg)';
-%     alpha(3,:)=neuralnetwork_3(vel_avg)';
-%     alpha(4,:)=neuralnetwork_4(vel_avg)';
+    alpha(1,:)=neuralnetwork_1(vel_avg)';
+    alpha(2,:)=neuralnetwork_2(vel_avg)';
+    alpha(3,:)=neuralnetwork_3(vel_avg)';
+    alpha(4,:)=neuralnetwork_4(vel_avg)';
     
     ctspeeddm=sign(vel_avg)*ceil(abs(vel_avg)*10);
     ctspeeddm=sign(ctspeeddm)*min(12,abs(ctspeeddm));

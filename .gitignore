@@ -1,6 +1,7 @@
 # files we don't want
 image/
 *.mp4
+opt_result/
 
 # Windows image file caches
 Thumbs.db

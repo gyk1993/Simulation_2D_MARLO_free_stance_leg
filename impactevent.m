@@ -24,12 +24,24 @@ L1=robot.L1; L2=robot.L2; L3=robot.L3; L4=robot.L4;
 
 [pT,pHip,p1R,p2R,p3R,p4R,p1L,p2L,p3L,p4L]=robot.get_joint_position(x);
 
-if p4L(2)<0.001 && p4L(1)>p4R(1)
-    value=0;
+% if p4L(2)<0.001
+%     value=0;
+% else
+%     value=1;
+% end
+
+if t>0.25
+%     if p4L(2)<0.001
+%         value=0;
+%     else
+%         value=1;
+%     end
+    value = p4L(2);
 else
+%     value=sign(p4L(2));
     value=1;
 end
 isterminal=1;
-direction=0;
+direction=-1;
 end
 
